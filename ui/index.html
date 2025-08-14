@@ -10,13 +10,14 @@
 
 <body>
   <div id="video-container">
-    <video id="player" autoplay muted playsinline></video>
+    <video id="player" autoplay muted playsinline controls></video>
   </div>
-  <div id="controls">
+  <div id="controls" class="can-hide">
     <button id="next-btn">⏭</button>
     <button id="mute-btn">🔇</button>
     <button id="fs-btn">⛶</button>
   </div>
+  <div id="video-title" class="can-hide"></div>
   <div id="info">
     <div id="time">--:--</div>
     <div id="weather">Loading weather...</div>

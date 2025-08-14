@@ -65,6 +65,21 @@ video {
   background: rgba(255, 255, 255, 0.2);
 }
 
+#video-title {
+  font-size: 22px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
 .hide-cursor {
   cursor: none;
+}
+
+.hide-cursor .can-hide {
+  opacity: 0;
+}
+
+.can-hide {
+  transition: opacity 0.5s ease-in-out;
 }
