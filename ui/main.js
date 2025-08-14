@@ -1,90 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Random Video Player with Info Panel</title>
-<style>
-  body {
-    margin: 0;
-    background: black;
-    display: flex;
-    height: 100vh;
-    color: white;
-    font-family: sans-serif;
-  }
-  #video-container {
-    flex: 0 0 auto;
-    aspect-ratio: 16 / 9;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  video {
-    height: 100%;
-    width: auto;
-  }
-  #info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    background: rgba(0,0,0,0.6);
-  }
-  #time {
-    font-size: 5rem;
-    margin-bottom: 20px;
-  }
-  #weather {
-    font-size: 2.5rem;
-    text-align: center;
-  }
-  #controls {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
-
-#controls button {
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  font-size: 1.5rem;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#controls button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.hide-cursor {
-  cursor: none;
-}
-</style>
-</head>
-<body>
-<div id="video-container">
-  <video id="player" autoplay muted playsinline></video>
-</div>
-<div id="controls">
-  <button id="next-btn">⏭</button>
-  <button id="mute-btn">🔇</button>
-  <button id="fs-btn">⛶</button>
-</div>
-<div id="info">
-  <div id="time">--:--</div>
-  <div id="weather">Loading weather...</div>
-</div>
-
-<script>
 async function getVideos() {
   const res = await fetch("/list");
   return await res.json();
@@ -127,10 +40,10 @@ setInterval(updateWeather, 10 * 60 * 1000); // every 10 min
 
 function weatherDescription(code) {
   const map = {
-    0:  ["☀️", "Clear sky"],
-    1:  ["🌤️", "Mainly clear"],
-    2:  ["⛅", "Partly cloudy"],
-    3:  ["☁️", "Overcast"],
+    0: ["☀️", "Clear sky"],
+    1: ["🌤️", "Mainly clear"],
+    2: ["⛅", "Partly cloudy"],
+    3: ["☁️", "Overcast"],
     45: ["🌫️", "Fog"],
     48: ["🌫️", "Depositing rime fog"],
     51: ["🌦️", "Light drizzle"],
@@ -222,7 +135,3 @@ document.addEventListener("mousemove", resetCursorTimer);
 
 // Start the timer on page load
 resetCursorTimer();
-
-</script>
-</body>
-</html>
