@@ -39,7 +39,12 @@ app.get('/list', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
 
     const videos = files.filter(f =>
-      ['.mkv'].includes(path.extname(f).toLowerCase())
+      [
+        '.mp4',
+        '.webm',
+        '.ogv',
+        '.mkv'
+      ].includes(path.extname(f).toLowerCase())
     ).filter(f => !blacklist.includes(f));
 
     res.json(videos);
