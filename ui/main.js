@@ -102,6 +102,7 @@ function weatherDescription(code) {
   let queue = shuffle([...videos]);
   const player = document.getElementById('player');
   const nextBtn = document.getElementById('next-btn');
+  const videoControlsBtn = document.getElementById('video-controls-btn');
   const muteBtn = document.getElementById('mute-btn');
   const fsBtn = document.getElementById('fs-btn');
   const videoTitle = document.getElementById('video-title');
@@ -123,6 +124,12 @@ function weatherDescription(code) {
   playNext();
 
   nextBtn.addEventListener('click', playNext);
+
+  // Mute/unmute toggle
+  videoControlsBtn.addEventListener('click', () => {
+    player.controls = !player.controls;
+    videoControlsBtn.textContent = player.controls ? '🔓' : '🔒';
+  });
 
   // Mute/unmute toggle
   muteBtn.addEventListener('click', () => {
