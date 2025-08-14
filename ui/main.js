@@ -16,16 +16,17 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// Weather from Open-Meteo
+let userLat = 0; // fallback lat
+let userLon = 0; // fallback lon
+
+function fetchWeather(lat, lon) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode&timezone=auto`;
+  return fetch(url).then(res => res.json());
+}
+
 async function updateWeather() {
   try {
-    const lat = 56.9496;
-    const lon = 24.1052;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode&timezone=auto`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-
+    const data = await fetchWeather(userLat, userLon);
     const temp = Math.round(data.current.temperature_2m);
     const code = data.current.weathercode;
     const [emoji, desc] = weatherDescription(code);
@@ -35,8 +36,26 @@ async function updateWeather() {
     document.getElementById("weather").textContent = "Weather unavailable";
   }
 }
-updateWeather();
-setInterval(updateWeather, 10 * 60 * 1000); // every 10 min
+
+// Try to get user location
+if ("geolocation" in navigator) {
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      userLat = pos.coords.latitude;
+      userLon = pos.coords.longitude;
+      updateWeather();
+    },
+    err => {
+      console.warn("Geolocation denied or failed, using fallback.", err);
+      updateWeather();
+    }
+  );
+} else {
+  updateWeather();
+}
+
+// Update every 10 min
+setInterval(updateWeather, 10 * 60 * 1000);
 
 function weatherDescription(code) {
   const map = {
