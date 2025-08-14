@@ -91,9 +91,12 @@ function weatherDescription(code) {
   return map[code] || ['❓', 'Unknown'];
 }
 
+let currentVideo = null;
+let videos = null;
+
 // Video playlist
 (async () => {
-  const videos = await getVideos();
+  videos = await getVideos();
   if (!videos.length) {
     alert('No videos found');
     return;
@@ -105,6 +108,7 @@ function weatherDescription(code) {
   const videoControlsBtn = document.getElementById('video-controls-btn');
   const muteBtn = document.getElementById('mute-btn');
   const fsBtn = document.getElementById('fs-btn');
+  const blBtn = document.getElementById('blacklist-btn');
   const videoTitle = document.getElementById('video-title');
 
   function playNext() {
@@ -112,6 +116,13 @@ function weatherDescription(code) {
       queue = shuffle([...videos]);
     }
     const next = queue.pop();
+    if (!next) {
+      currentVideo = null;
+      videoTitle.textContent = '';
+      player.src = '';
+      return alert('No videos found');
+    }
+    currentVideo = next;
     videoTitle.textContent = next;
     player.src = `/videos/${encodeURIComponent(next)}`;
     player.play();
@@ -145,8 +156,27 @@ function weatherDescription(code) {
       document.exitFullscreen();
     }
   });
-})();
 
+  blBtn.addEventListener('click', async () => {
+    if (!currentVideo || !window.confirm(`Are you sure you want to blacklist the file: \n${currentVideo}?`)) {
+      return
+    }
+    videos = videos.filter((v) => v !== currentVideo)
+    try {
+      await fetch('/blacklist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: currentVideo })
+      });
+      console.log(`Blacklisted: ${currentVideo}`);
+      // Remove from queue
+      queue = queue.filter(v => v !== currentVideo);
+      playNext();
+    } catch (err) {
+      console.error('Failed to blacklist:', err);
+    }
+  });
+})();
 
 let hideCursorTimer;
 
