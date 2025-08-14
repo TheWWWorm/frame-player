@@ -11,11 +11,14 @@ const VIDEO_DIR = path.join(__dirname, 'videos');
 const BLACKLIST_FILE = path.join(__dirname, 'blacklist.json');
 
 function getBlacklist() {
-  if (!fs.existsSync(BLACKLIST_FILE)) return [];
+  if (!fs.existsSync(BLACKLIST_FILE)) {
+    return [];
+  }
   try {
     return JSON.parse(fs.readFileSync(BLACKLIST_FILE, 'utf-8'));
   } catch (e) {
-    console.warn(e);
+    console.warn('Could not read the blacklist, resetting it');
+    saveBlacklist([])
     return [];
   }
 }
